@@ -1,41 +1,37 @@
-# Docker-Practice
+# Docker Practice
 
+Docker 핵심 개념과 사용법을 학습하고 정리한 레포지토리.
 
+---
 
+## 문서 구성
 
+| 파일 | 설명 |
+|------|------|
+| [DOCKER/docker-guide.md](DOCKER/docker-guide.md) | 핵심 개념 · Dockerfile · Compose 개요 · CLI 명령어 · 트러블슈팅 |
+| [DOCKER/docker-compose.md](DOCKER/docker-compose.md) | docker-compose.yml 옵션 상세 · 단일/멀티 서비스 예시 · 환경 분리 |
+| [DOCKER/docker-container.md](DOCKER/docker-container.md) | 컨테이너 라이프사이클 · docker run 옵션 · 내부 접근 · 리소스 제한 |
 
-#### [reference]
+---
 
-- 네트워크를 사용하여 두 컨테이너 연결(django 백엔드, 반응/node.js 프론트엔드)
-https://forums.docker.com/t/connecting-two-containers-using-a-network-django-backend-react-nodejs-frontend/107472
+## 학습 순서
 
+```
+1. Docker-Guide.md     → 전체 개념 및 흐름 파악
+2. Docker-Container.md → 컨테이너 단위 조작 방법 숙지
+3. Docker-Compose.md   → 멀티 서비스 구성 및 실전 예시
+```
 
-- Hands-On Cross-Container Communication(Django&Postgres) 
-https://medium.com/@simofirdoussi/hands-on-cross-container-communication-django-postgres-202c7c9a41d4
-(But not use docker-compose)
+---
 
+## 참고 자료
 
-- Django Development with Docker Compose and Machine
-https://realpython.com/django-development-with-docker-compose-and-machine/
+### 공식 문서
 
-
-- How To Deploy Django Using Docker Compose on Windows In 9 Steps
-
-https://medium.com/powered-by-django/deploy-django-using-docker-compose-windows-3068f2d981c4
-
-
-
-##### [books]
-
-- 시작하세요! 도커/쿠버네티스: 친절한 설명으로 쉽게 이해하는 컨테이너 관리
-(Getting-started-with-Docker/k8s)
-
-
-##### 2.4 Dockerfile
-2.4.1 이미지를 생성하는 방법   
-개발한 애플리케이션을 컨테이너화할 때 가장 먼저 생각나는 방법은 아래와 같습니다.
-
-1. 아무것도 존재하지 않는 이미지(우분투,CentOS 등)로 컨테이너 생ㅅ겅
-2. 애플리케이션을 위한 환경을 설치하고 소스코드 등을 복하새 잘 동작하는 것을 확인
-3. 컨테이너를 이미지로 커밋(Commit)
+| 주제 | 링크 |
+|------|------|
+| Docker 공식 문서 | https://docs.docker.com/ |
+| Docker Hub | https://hub.docker.com/ |
+| Dockerfile 레퍼런스 | https://docs.docker.com/reference/dockerfile/ |
+| Docker Compose 레퍼런스 | https://docs.docker.com/compose/ |
 
