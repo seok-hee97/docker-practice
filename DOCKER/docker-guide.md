@@ -11,8 +11,9 @@
 2. [Dockerfile](#2-dockerfile)
 3. [Docker Compose](#3-docker-compose)
 4. [주요 명령어](#4-주요-명령어)
-5. [트러블슈팅](#5-트러블슈팅)
-6. [참고 공식 문서](#6-참고-공식-문서)
+5. [Docker Hub / Registry](#5-docker-hub--registry)
+6. [트러블슈팅](#6-트러블슈팅)
+7. [참고 공식 문서](#7-참고-공식-문서)
 
 ---
 
@@ -430,7 +431,114 @@ docker system prune -a
 
 ---
 
-## 5. 트러블슈팅
+## 5. Docker Hub / Registry
+
+Docker Hub는 Docker 공식 이미지 레지스트리로, 이미지를 저장하고 공유할 수 있다.
+
+### 5.1 Docker Hub 로그인
+
+```bash
+docker login                          # Docker Hub (hub.docker.com) 로그인
+docker login -u <유저명>              # 유저명 지정
+docker login <레지스트리URL>          # Private Registry 로그인 (예: ghcr.io, ECR)
+
+docker logout                         # 로그아웃
+```
+
+> 로그인 정보는 `~/.docker/config.json`에 저장된다.
+
+---
+
+### 5.2 이미지 태깅 (docker tag)
+
+이미지를 Push하려면 `<유저명>/<이미지명>:<태그>` 형식으로 태깅해야 한다.
+
+```bash
+docker tag <원본이미지> <유저명>/<이미지명>:<태그>
+
+# 예시
+docker tag my-app:latest evan0416/my-app:1.0.0
+docker tag my-app:latest evan0416/my-app:latest
+```
+
+**태그 네이밍 규칙:**
+
+| 패턴 | 예시 | 용도 |
+|------|------|------|
+| `latest` | `evan0416/app:latest` | 최신 버전 (기본값) |
+| 버전 태그 | `evan0416/app:1.0.0` | 특정 릴리즈 고정 |
+| 환경 태그 | `evan0416/app:prod` | 환경 구분 |
+
+> `latest`는 자동으로 최신을 추적하지 않는다. 명시적으로 태깅해야 한다.
+
+---
+
+### 5.3 이미지 Push
+
+```bash
+docker push <유저명>/<이미지명>:<태그>
+
+# 예시
+docker push evan0416/my-app:1.0.0
+docker push evan0416/my-app:latest
+```
+
+**전체 워크플로우:**
+
+```bash
+# 1. 로그인
+docker login
+
+# 2. 이미지 빌드
+docker build -t my-app:latest .
+
+# 3. 태깅
+docker tag my-app:latest evan0416/my-app:latest
+
+# 4. Push
+docker push evan0416/my-app:latest
+```
+
+---
+
+### 5.4 이미지 Pull
+
+```bash
+docker pull <이미지명>:<태그>
+
+# 예시
+docker pull evan0416/my-app:latest    # Docker Hub에서 Pull
+docker pull nginx:1.25                # 공식 이미지 특정 버전 Pull
+docker pull nginx                     # 태그 생략 시 latest
+```
+
+> 공개(Public) 이미지는 로그인 없이 Pull 가능하다.
+
+---
+
+### 5.5 Private Registry
+
+Docker Hub 외에 다양한 Private Registry를 사용할 수 있다.
+
+| 레지스트리 | 주소 형식 | 비고 |
+|-----------|----------|------|
+| Docker Hub | `유저명/이미지:태그` | 기본값 |
+| GitHub Container Registry | `ghcr.io/유저명/이미지:태그` | GitHub Actions 연동 |
+| AWS ECR | `<account>.dkr.ecr.<region>.amazonaws.com/이미지:태그` | AWS 환경 |
+| Self-hosted | `localhost:5000/이미지:태그` | 사내 레지스트리 |
+
+```bash
+# GitHub Container Registry 예시
+docker login ghcr.io -u <GitHub유저명>
+docker tag my-app:latest ghcr.io/evan0416/my-app:latest
+docker push ghcr.io/evan0416/my-app:latest
+```
+
+> 공식 문서: https://docs.docker.com/docker-hub/
+
+---
+
+## 6. 트러블슈팅
 
 ### T1. 컨테이너 간 `localhost` 접근 불가
 
@@ -517,7 +625,7 @@ docker compose up -d <서비스명>
 
 ---
 
-## 6. 참고 공식 문서
+## 7. 참고 공식 문서
 
 | 주제 | 링크 |
 |------|------|
@@ -530,3 +638,6 @@ docker compose up -d <서비스명>
 | 환경변수 관리 | https://docs.docker.com/compose/how-tos/environment-variables/ |
 | 서비스 시작 순서 제어 | https://docs.docker.com/compose/how-tos/startup-order/ |
 | CLI 레퍼런스 | https://docs.docker.com/reference/cli/docker/ |
+| Docker Hub | https://docs.docker.com/docker-hub/ |
+| docker push | https://docs.docker.com/reference/cli/docker/image/push/ |
+| docker tag | https://docs.docker.com/reference/cli/docker/image/tag/ |
